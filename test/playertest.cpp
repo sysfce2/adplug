@@ -135,6 +135,8 @@ static const char *filelist[] = {
   "DEMO.XMI",       // XMI (Miles Design)
   "VACANCE.WM",     // Silky's MusicV WM
   "CHARGEN.CMF",    // Creative Music Format with midi-like drums on channel 9
+  "CARPET.FMK",     // FM-Kingtracker
+  "SURROUND.FMK",   // FM-Kingtracker (OPL3 stereo)
   NULL
 };
 
