@@ -39,6 +39,7 @@ set(SOURCES
     emuopl.cpp
     flash.cpp
     fmc.cpp
+    fmk.cpp
     fprovide.cpp
     got.cpp
     herad.cpp
@@ -126,6 +127,7 @@ set(HEADERS
     player.h
     plx.h
     fmc.h
+    fmk.h
     mad.h
     xad.h
     bmf.h

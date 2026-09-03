@@ -46,6 +46,7 @@ src_libadplug_la_SOURCES = \
 	src/emuopl.cpp \
 	src/flash.cpp \
 	src/fmc.cpp \
+	src/fmk.cpp \
 	src/fprovide.cpp \
 	src/got.cpp \
 	src/herad.cpp \
@@ -141,6 +142,7 @@ pkginclude_HEADERS = \
 	src/u6m.h \
 	src/player.h \
 	src/fmc.h \
+	src/fmk.h \
 	src/mad.h \
 	src/xad.h \
 	src/bmf.h \
@@ -474,7 +476,11 @@ EXTRA_DIST += \
 	test/testmus/dune1_v0.dro \
 	test/testref/dune1_v0.ref \
 	test/testmus/samur_v0.dro \
-	test/testref/samur_v0.ref
+	test/testref/samur_v0.ref \
+	test/testmus/CARPET.FMK \
+	test/testref/CARPET.ref \
+	test/testmus/SURROUND.FMK \
+	test/testref/SURROUND.ref
 # Regression tests:
 EXTRA_DIST += \
 	test/fuzzing/i-85.bmf \
