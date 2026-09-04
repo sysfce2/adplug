@@ -137,8 +137,42 @@ CfmkPlayer::CfmkPlayer(Copl *newopl)
 {
     m_song_name[0] = 0;
     m_composer[0] = 0;
+
+    /* Song header defaults; parse() overwrites these from the file. */
+    m_file_type = 0;
+    m_global = 0;
     m_base_speed = 50;
+    m_init_speed = 0;
+    m_order_len = 0;
+    m_num_instrs = 0;
+    m_num_patterns = 0;
+    m_num_tracks = 0;
+
+    memset(m_track_pan, 0, sizeof(m_track_pan));
+    memset(m_track_type, 0, sizeof(m_track_type));
+    memset(m_track_opl, 0, sizeof(m_track_opl));
+    memset(m_order, 0, sizeof(m_order));
+    memset(m_pat_ptr, 0, sizeof(m_pat_ptr));
+    memset(m_instr_ptr, 0, sizeof(m_instr_ptr));
+    memset(m_instrs, 0, sizeof(m_instrs));
+
+    /* Replayer state; rewind() resets all of this again before playback. */
+    m_pos_order = 0;
+    m_cur_pattern = 0;
+    m_row = 0;
+    m_tick = 0;
     m_speed = 6;
+    m_opl3 = 0;
+    m_stereo = 0;
+    m_rhythm = 0;
+    m_song_end = 0;
+    m_cur_chip = -1;
+
+    memset(m_regs, 0, sizeof(m_regs));
+    memset(m_ch, 0, sizeof(m_ch));
+    memset(m_cells, 0, sizeof(m_cells));
+    memset(m_pat_cache, 0, sizeof(m_pat_cache));
+    memset(m_pat_loaded, 0, sizeof(m_pat_loaded));
 }
 
 CfmkPlayer::~CfmkPlayer()
@@ -848,7 +882,7 @@ void CfmkPlayer::handle_effect(int ci, uint8_t cmd, uint8_t info, uint8_t rowtic
         c->car_params[x & 7] = y;
         if (x >= 1 && x <= 7) {
             uint8_t base = (x==1)?0x20:(x==2)?0x40:(x==3)?0x60:(x==4)?0x60:(x==5)?0x80:(x==6)?0x80:0xE0;
-            uint8_t shift = (x==1)?0:(x==2)?6:(x==3)?4:(x==4)?0:(x==5)?4:(x==6)?0:0;
+            uint8_t shift = (x==2)?6:(x==3)?4:(x==5)?4:0;
             uint8_t mask = (x==7)?0xF8:0x0F;
             uint8_t cur = read_op_reg(c->opl_ch, 1, base);
             write_op_reg(c->opl_ch, 1, base, (uint8_t)((cur & mask) | (y << shift)));
@@ -864,7 +898,7 @@ void CfmkPlayer::handle_effect(int ci, uint8_t cmd, uint8_t info, uint8_t rowtic
         c->mod_params[x & 7] = y;
         if (x >= 1 && x <= 7) {
             uint8_t base = (x==1)?0x20:(x==2)?0x40:(x==3)?0x60:(x==4)?0x60:(x==5)?0x80:(x==6)?0x80:0xE0;
-            uint8_t shift = (x==1)?0:(x==2)?6:(x==3)?4:(x==4)?0:(x==5)?4:(x==6)?0:0;
+            uint8_t shift = (x==2)?6:(x==3)?4:(x==5)?4:0;
             uint8_t mask = (x==7)?0xF8:0x0F;
             uint8_t cur = read_op_reg(c->opl_ch, 0, base);
             write_op_reg(c->opl_ch, 0, base, (uint8_t)((cur & mask) | (y << shift)));
